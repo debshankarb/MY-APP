@@ -33,7 +33,14 @@ jobs:
           npm run build --if-present
           npm run test --if-present
           popd
-
+      #zip the build directory
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.7.6
+        with:
+          # Filename for archive
+          filename: release.zip
+          path: ./build/*
+          
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
@@ -59,5 +66,5 @@ jobs:
         with:
           app-name: 'FuncAppBuildnSummaryWithGithub'
           slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: release.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_801A5B6A26BE4C16B51F235B0ADB702E }}
